@@ -2,7 +2,7 @@ import React from 'react';
 import {BrowserRouter, Route, Switch} from 'react-router-dom';
 
 import Menu from './Menu';
-import Users from '../users';
+import Users from './users';
 
 const Tareas = () => <div>Tareas</div>
 
