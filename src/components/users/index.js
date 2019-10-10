@@ -2,11 +2,38 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 
 import * as usersActions from '../../actions/usersActions';
+import Spinner from '../general/Spinner';
 
 class Users extends Component {
 
   componentDidMount() {
     this.props.fetchAll();
+  }
+
+  ponerContenido = () => {
+    if(this.props.loading) {
+      return(<Spinner />)
+    }
+    return (
+      <table className="tabla">
+        <thead>
+          <tr>
+            <th>
+              Nombre
+            </th>
+            <th>
+              Correo
+            </th>
+            <th>
+              Enlace
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          { this.ponerFilas() }
+        </tbody>
+      </table>
+    );
   }
 
   ponerFilas = () => (
@@ -21,28 +48,11 @@ class Users extends Component {
 
   render() {
     //console.log("[Users]", this.props);
-    return (
+    return(
       <div>
-        <table className="tabla">
-          <thead>
-            <tr>
-              <th>
-                Nombre
-              </th>
-              <th>
-                Correo
-              </th>
-              <th>
-                Enlace
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            { this.ponerFilas() }
-          </tbody>
-        </table>
+        {this.ponerContenido()}
       </div>
-    );
+    )
   }
 }
 
