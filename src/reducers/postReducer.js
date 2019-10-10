@@ -1,4 +1,4 @@
-import {FETCH_POSTS, CARGANDO, ERROR} from '../action-types/postTypes';
+import {FETCH_POSTS, GET_USER_POSTS, CARGANDO, ERROR} from '../action-types/postTypes';
 
 const INITIAL_STATE = {
 	posts: [],
@@ -8,7 +8,7 @@ const INITIAL_STATE = {
 
 export default (state = INITIAL_STATE, action) => {
 	switch (action.type) {
-		case FETCH_POSTS:
+		case GET_USER_POSTS:
 			return {...state, posts: action.payload, loading: false, error: ""};
 		case CARGANDO:
 			return {...state, loading: true}
