@@ -16,7 +16,7 @@ export const fetchAll = () => async (dispatch) => {
 		console.log('[error]', error.message);
 		dispatch({
 			type: ERROR,
-			payload: error.message
+			payload: "Algio salió mal, intente más tarde."
 		})
 	}
 }

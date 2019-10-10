@@ -33,3 +33,18 @@ body {
 .center{
   text-align: center;
 }
+
+.red{
+  color: red;
+}
+.error_icon{
+  display: inline-block;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  font-size: 40px;
+  line-height: 60px;
+  background-color: red;
+  color: #fff;
+  font-weight: 800;
+}
