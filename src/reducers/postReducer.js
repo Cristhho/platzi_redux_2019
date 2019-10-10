@@ -1,4 +1,4 @@
-import {FETCH_POSTS, GET_USER_POSTS, CARGANDO, ERROR} from '../action-types/postTypes';
+import {GET_USER_POSTS, CARGANDO, ERROR} from '../action-types/postTypes';
 
 const INITIAL_STATE = {
 	posts: [],

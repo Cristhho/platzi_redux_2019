@@ -3,6 +3,8 @@ import {connect} from 'react-redux';
 
 import * as usersActions from '../../actions/usersActions';
 import * as postActions from '../../actions/postActions';
+import Spinner from '../general/Spinner';
+import Fatal from '../general/Fatal';
 
 const {fetchAll: fetchAllUsers} = usersActions;
 const {getUserPosts} = postActions;
@@ -10,17 +12,44 @@ const {getUserPosts} = postActions;
 class Posts extends Component {
 
 	async componentDidMount() {
+		const {
+			fetchAllUsers,
+			getUserPosts,
+			match:{params:{id}}
+		} = this.props;
 	  if(!this.props.usersReducer.usuarios.length) {
-	  	await this.props.fetchAllUsers();
+	  	await fetchAllUsers();
 	  }
-	  this.props.getUserPosts(this.props.match.params.id);
+	  if(this.props.usersReducer.error) {
+	  	return null;
+	  }
+	  if(!('posts_key' in this.props.usersReducer.usuarios[id])){
+	  	getUserPosts(id);
+	  }
+	}
+
+	printUser = () => {
+		const {
+			usersReducer,
+			match:{params:{id}}
+		} = this.props;
+
+		if(usersReducer.error) {
+			return <Fatal message={usersReducer.error}/>
+		}
+		if(!usersReducer.usuarios.length || usersReducer.loading) {
+			return <Spinner />
+		}
+
+		return (
+			<h1>Autor: {usersReducer.usuarios[id].name}</h1>
+		)
 	}
 
   render() {
     return (
     	<div>
-    		<h1>Autor: </h1>
-    		{this.props.match.params.id}
+    		{this.printUser()}
     	</div>
     );
   }

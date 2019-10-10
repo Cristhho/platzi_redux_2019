@@ -1,6 +1,9 @@
 import axios from 'axios';
 
 import {FETCH_POSTS, GET_USER_POSTS, CARGANDO, ERROR} from '../action-types/postTypes';
+import * as userTypes from '../action-types/usersTypes';
+
+const {FETCH_USERS: FETCH_ALL_USERS} = userTypes;
 
 export const fetchAll = () => async (dispatch) => {
 	dispatch({
@@ -21,10 +24,24 @@ export const fetchAll = () => async (dispatch) => {
 	}
 };
 
-export const getUserPosts = (user_id) => async (dispatch, getState) => {
+export const getUserPosts = (key) => async (dispatch, getState) => {
 	const {posts} = getState().postReducer;
+	const {usuarios} = getState().usersReducer;
+	const user_id = usuarios[key].id;
 	const user_posts = await axios.get(`https://jsonplaceholder.typicode.com/posts?userId=${user_id}`);
 	const updated_posts = [...posts, user_posts.data];
+
+	const posts_key = updated_posts.length - 1;
+	const updated_users = [...usuarios];
+	updated_users[key] = {
+		...usuarios[key],
+		posts_key
+	};
+
+	dispatch({
+		type: FETCH_ALL_USERS,
+		payload: updated_users
+	});
 
 	dispatch({
 		type: GET_USER_POSTS,
