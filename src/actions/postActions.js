@@ -25,26 +25,39 @@ export const fetchAll = () => async (dispatch) => {
 };
 
 export const getUserPosts = (key) => async (dispatch, getState) => {
+
+	dispatch({
+		type: CARGANDO
+	});
+
 	const {posts} = getState().postReducer;
 	const {usuarios} = getState().usersReducer;
 	const user_id = usuarios[key].id;
-	const user_posts = await axios.get(`https://jsonplaceholder.typicode.com/posts?userId=${user_id}`);
-	const updated_posts = [...posts, user_posts.data];
+	try{
+		const user_posts = await axios.get(`https://jsonplaceholder.typicode.com/posts?userId=${user_id}`);
+		const updated_posts = [...posts, user_posts.data];
 
-	const posts_key = updated_posts.length - 1;
-	const updated_users = [...usuarios];
-	updated_users[key] = {
-		...usuarios[key],
-		posts_key
-	};
+		dispatch({
+			type: GET_USER_POSTS,
+			payload: updated_posts
+		})
 
-	dispatch({
-		type: FETCH_ALL_USERS,
-		payload: updated_users
-	});
+		const posts_key = updated_posts.length - 1;
+		const updated_users = [...usuarios];
+		updated_users[key] = {
+			...usuarios[key],
+			posts_key
+		};
 
-	dispatch({
-		type: GET_USER_POSTS,
-		payload: updated_posts
-	})
+		dispatch({
+			type: FETCH_ALL_USERS,
+			payload: updated_users
+		});
+	} catch(error) {
+		console.log('[error]', error.message);
+		dispatch({
+			type: ERROR,
+			payload: "Publicaciones no disponibles."
+		})
+	}
 };

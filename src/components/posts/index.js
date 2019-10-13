@@ -26,7 +26,7 @@ class Posts extends Component {
 	  if(!('posts_key' in this.props.usersReducer.usuarios[id])){
 	  	getUserPosts(id);
 	  }
-	}
+	};
 
 	printUser = () => {
 		const {
@@ -44,15 +44,46 @@ class Posts extends Component {
 		return (
 			<h1>Autor: {usersReducer.usuarios[id].name}</h1>
 		)
-	}
+	};
+
+	printPosts = () => {
+		const {
+			usersReducer,
+			usersReducer: {usuarios},
+			postReducer,
+			postReducer: {posts},
+			match:{params:{id}}
+		} = this.props;
+
+		if(!usuarios.length) return null;
+		if(usersReducer.error) return;
+		if(postReducer.loading) return <Spinner />;
+		if(postReducer.error) return <Fatal message={postReducer.error}/>;
+		if(!posts.length) return null;
+		if(!('posts_key' in usuarios[id])) return;
+
+		const {posts_key} = usuarios[id];
+		return posts[posts_key].map((post) => {
+			return (
+				<div
+					key={post.id}
+					className="post_title"
+					onClick={() => alert(post.id)}>
+					<h2>{post.title}</h2>
+					<p>{post.body}</p>
+				</div>
+			)
+		});
+	};
 
   render() {
     return (
     	<div>
     		{this.printUser()}
+    		{this.printPosts()}
     	</div>
     );
-  }
+  };
 }
 
 const mapStateToProps = ({usersReducer, postReducer}) => {
