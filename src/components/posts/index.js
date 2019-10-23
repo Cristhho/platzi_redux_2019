@@ -5,9 +5,10 @@ import * as usersActions from '../../actions/usersActions';
 import * as postActions from '../../actions/postActions';
 import Spinner from '../general/Spinner';
 import Fatal from '../general/Fatal';
+import Comments from './Comments';
 
 const {fetchAll: fetchAllUsers} = usersActions;
-const {getUserPosts} = postActions;
+const {getUserPosts, openClose, getComments} = postActions;
 
 class Posts extends Component {
 
@@ -63,17 +64,30 @@ class Posts extends Component {
 		if(!('posts_key' in usuarios[id])) return;
 
 		const {posts_key} = usuarios[id];
-		return posts[posts_key].map((post) => {
-			return (
-				<div
-					key={post.id}
-					className="post_title"
-					onClick={() => alert(post.id)}>
-					<h2>{post.title}</h2>
-					<p>{post.body}</p>
-				</div>
-			)
-		});
+		return this.printInfo(posts[posts_key], posts_key);
+	};
+
+	printInfo = (posts, posts_key) => (
+		posts.map((post, index) => (
+			<div
+				key={post.id}
+				className="post_title">
+				<h2>{post.title}</h2>
+				<p>{post.body}</p>
+				<button
+					onClick={() => this.showComments(posts_key, index, post.comments)}>
+					{(post.open) ? 'Esconder comentarios': 'Mostrar comentarios'}
+				</button>
+				{
+					(post.open) ? <Comments comments={post.comments} /> : null
+				}
+			</div>
+		))
+	);
+
+	showComments = (posts_key, index, comments) => {
+		this.props.openClose(posts_key, index);
+		if(!comments.length) this.props.getComments(posts_key, index);
 	};
 
   render() {
@@ -95,7 +109,9 @@ const mapStateToProps = ({usersReducer, postReducer}) => {
 
 const mapDispatchToProps = {
 	fetchAllUsers,
-	getUserPosts
+	getUserPosts,
+	openClose,
+	getComments
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Posts);

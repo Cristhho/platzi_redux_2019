@@ -23,6 +23,8 @@ body {
   background-color: #253a46;
   padding: 20px;
   font-size: 20px;
+  position: sticky;
+  top: 0;
 }
 #menu a{
   color: #fff;
@@ -51,4 +53,22 @@ body {
 
 .post_title{
   border-top: 1px solid #000000;
+}
+.post_title button{
+  font-size: 14px;
+  padding: 0.4em 1.4em;
+  border: none;
+  background: #95CA3E;
+  color: #fff;
+  font-weight: 700;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+.post_title ul{
+  list-style: none;
+}
+.comment_email{
+  display: block;
+  font-weight: 700;
+  text-decoration: underline;
 }

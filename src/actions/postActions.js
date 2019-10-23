@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import {FETCH_POSTS, GET_USER_POSTS, CARGANDO, ERROR} from '../action-types/postTypes';
+import {FETCH_POSTS, UPDATE_POSTS, CARGANDO, ERROR} from '../action-types/postTypes';
 import * as userTypes from '../action-types/usersTypes';
 
 const {FETCH_USERS: FETCH_ALL_USERS} = userTypes;
@@ -35,10 +35,17 @@ export const getUserPosts = (key) => async (dispatch, getState) => {
 	const user_id = usuarios[key].id;
 	try{
 		const user_posts = await axios.get(`https://jsonplaceholder.typicode.com/posts?userId=${user_id}`);
-		const updated_posts = [...posts, user_posts.data];
+
+		const new_posts = user_posts.data.map((post) => ({
+			...post,
+			comments: [],
+			open: false
+		}));
+
+		const updated_posts = [...posts, new_posts];
 
 		dispatch({
-			type: GET_USER_POSTS,
+			type: UPDATE_POSTS,
 			payload: updated_posts
 		})
 
@@ -61,3 +68,47 @@ export const getUserPosts = (key) => async (dispatch, getState) => {
 		})
 	}
 };
+
+export const openClose = (posts_key, index) => (dispatch, getState) => {
+	const {posts} = getState().postReducer;
+	const selected = posts[posts_key][index];
+
+	const updated = {
+		...selected,
+		open: !selected.open
+	};
+
+	const updated_posts = [...posts];
+	updated_posts[posts_key] = [
+	...updated_posts[posts_key]
+	];
+	updated_posts[posts_key][index] = updated;
+
+	dispatch({
+		type: UPDATE_POSTS,
+		payload: updated_posts
+	})
+}
+
+export const getComments = (posts_key, index) => async (dispatch, getState) => {
+	const {posts} = getState().postReducer;
+	const selected = posts[posts_key][index];
+
+	const post_comments = await axios.get(
+		`https://jsonplaceholder.typicode.com/comments?postId=${selected.id}`);
+	const updated = {
+		...selected,
+		comments: post_comments.data
+	};
+
+	const updated_posts = [...posts];
+	updated_posts[posts_key] = [
+	...updated_posts[posts_key]
+	];
+	updated_posts[posts_key][index] = updated;
+
+	dispatch({
+		type: UPDATE_POSTS,
+		payload: updated_posts
+	})
+}
