@@ -1,9 +1,12 @@
-import {UPDATE_POSTS, CARGANDO, ERROR} from '../action-types/postTypes';
+import {UPDATE_POSTS, CARGANDO, ERROR,
+	UPDATE_COMMENTS, CARGANDO_COMENTARIOS, ERROR_COMENTARIOS} from '../action-types/postTypes';
 
 const INITIAL_STATE = {
 	posts: [],
 	loading: false,
-	error: ""
+	error: "",
+	loading_comments: false,
+	comments_error: ""
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -14,6 +17,12 @@ export default (state = INITIAL_STATE, action) => {
 			return {...state, loading: true}
 		case ERROR:
 			return {...state, error: action.payload, loading: false}
+		case UPDATE_COMMENTS:
+			return {...state, posts: action.payload, loading_comments: false, comments_error: ""};
+		case CARGANDO_COMENTARIOS:
+			return {...state, loading_comments: true}
+		case ERROR_COMENTARIOS:
+			return {...state, comments_error: action.payload, loading_comments: false}
 		default:
 			return state;
 	}
