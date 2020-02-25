@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux';
+import {Link} from 'react-router-dom';
 
 import Spinner from '../general/Spinner';
 import Fatal from '../general/Fatal';
@@ -8,7 +9,7 @@ import * as tasksActions from '../../actions/tasksActions';
 class Tasks extends Component {
 
 	componentDidMount() {
-		this.props.fetchAll();
+		if(!Object.keys(this.props.tasks).length) this.props.fetchAll();
 	}
 
 	showContent = () => {
@@ -44,6 +45,9 @@ class Tasks extends Component {
   render() {
     return (
     	<div>
+    		<button>
+    			<Link to="/tasks/save">Agregar</Link>
+    		</button>
     		{this.showContent()}
     	</div>
     );

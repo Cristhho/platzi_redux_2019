@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-import {FETCH_ALL, CARGANDO, ERROR} from '../action-types/tasksTypes';
+import {FETCH_ALL, CARGANDO, ERROR,
+	CHANGE_USER_ID, CHANGE_TITLE, TASK_ADDED} from '../action-types/tasksTypes';
 
 export const fetchAll = () => async (dispatch) => {
 	dispatch({
@@ -28,6 +29,38 @@ export const fetchAll = () => async (dispatch) => {
 		dispatch({
 			type: ERROR,
 			payload: "Tareas no disponibles."
+		})
+	}
+}
+
+export const changeUserId = (value) => (dispatch) => {
+	dispatch({
+		type: CHANGE_USER_ID,
+		payload: value
+	});
+}
+
+export const changeTitle = (value) => (dispatch) => {
+	dispatch({
+		type: CHANGE_TITLE,
+		payload: value
+	});
+}
+
+export const add = (task) => async (dispatch) => {
+	dispatch({
+		type: CARGANDO
+	});
+	try {
+		const response = await axios.post('https://jsonplaceholder.typicode.com/todos', task);
+		dispatch({
+			type: TASK_ADDED
+		})
+	} catch(e) {
+		console.error(e);
+		dispatch({
+			type: ERROR,
+			payload: "Intente mas tarde."
 		})
 	}
 }
