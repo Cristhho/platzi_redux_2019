@@ -4,8 +4,7 @@ import {BrowserRouter, Route, Switch} from 'react-router-dom';
 import Menu from './Menu';
 import Users from './users';
 import Posts from './posts';
-
-const Tareas = () => <div>Tareas</div>
+import Tasks from './tasks';
 
 const App = () => {
   return(
@@ -14,7 +13,7 @@ const App = () => {
       <div className="margen">
         <Switch>      	
 	        <Route exact path="/" component={Users} />
-	        <Route exact path="/tasks" component={Tareas} />
+	        <Route exact path="/tasks" component={Tasks} />
           <Route exact path="/posts/:id" component={Posts} />
         </Switch>
       </div>
