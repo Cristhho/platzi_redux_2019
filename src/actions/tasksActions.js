@@ -64,3 +64,21 @@ export const add = (task) => async (dispatch) => {
 		})
 	}
 }
+
+export const edit = (task) => async (dispatch) => {
+	dispatch({
+		type: CARGANDO
+	});
+	try {
+		const response = await axios.put(`https://jsonplaceholder.typicode.com/todos/${task.id}`, task);
+		dispatch({
+			type: TASK_ADDED
+		})
+	} catch(e) {
+		console.error(e);
+		dispatch({
+			type: ERROR,
+			payload: "Intente mas tarde."
+		})
+	}
+}

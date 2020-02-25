@@ -38,6 +38,8 @@ class Tasks extends Component {
 				{
 					byUser[task].title
 				}
+				<button className="m_left"><Link to={`/tasks/save/${userId}/${task}`}>Editar</Link></button>
+				<button className="m_left">Eliminar</button>
 			</div>
 		))
 	}

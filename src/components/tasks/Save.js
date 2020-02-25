@@ -8,6 +8,21 @@ import * as tasksActions from '../../actions/tasksActions';
 
 class Save extends Component {
 
+	componentDidMount() {
+		const {
+			match:{params:{userId, taskId}},
+			tasks,
+			changeUserId,
+			changeTitle
+		} = this.props;
+
+		if(userId && taskId) {
+			const task = tasks[userId][taskId];
+			changeUserId(task.userId);
+			changeTitle(task.title);
+		}
+	}
+
 	changeUserId = (event) => {
 		this.props.changeUserId(event.target.value);
 	};
@@ -16,14 +31,26 @@ class Save extends Component {
 	};
 
 	save = () => {
-		const {user_id, title, add} = this.props;
+		const {
+			match:{params:{userId, taskId}},
+			tasks, user_id, title, add, edit} = this.props;
 		const newTask = {
 			userId: user_id,
 			title,
 			completed: false
 		};
 
-		add(newTask);
+		if(userId && taskId) {
+			const task = tasks[userId][taskId];
+			const edited_task = {
+				...task,
+				completed: task.completed,
+				id: task.id
+			};
+			edit(edited_task);
+		} else {
+			add(newTask);
+		}
 	};
 
 	disable = () => {
