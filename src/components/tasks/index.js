@@ -12,6 +12,11 @@ class Tasks extends Component {
 		if(!Object.keys(this.props.tasks).length) this.props.fetchAll();
 	}
 
+	componentDidUpdate(prevProps, prevState) {
+		const {tasks, loading, fetchAll} = this.props;
+		if(!Object.keys(tasks).length && !loading) fetchAll();
+	}
+
 	showContent = () => {
 		const {tasks, loading, error} = this.props;
 		if(loading) return <Spinner />;
@@ -27,7 +32,7 @@ class Tasks extends Component {
 	}
 
 	showTasks = (userId) => {
-		const {tasks} = this.props;
+		const {tasks, deleteTask} = this.props;
 		const byUser = {
 			...tasks[userId]
 		};
@@ -39,7 +44,7 @@ class Tasks extends Component {
 					byUser[task].title
 				}
 				<button className="m_left"><Link to={`/tasks/save/${userId}/${task}`}>Editar</Link></button>
-				<button className="m_left">Eliminar</button>
+				<button className="m_left" onClick={() => deleteTask(task)}>Eliminar</button>
 			</div>
 		))
 	}

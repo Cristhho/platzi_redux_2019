@@ -20,6 +20,9 @@ class Save extends Component {
 			const task = tasks[userId][taskId];
 			changeUserId(task.userId);
 			changeTitle(task.title);
+		} else {
+			changeUserId('');
+			changeTitle('');
 		}
 	}
 

@@ -79,6 +79,26 @@ export const edit = (task) => async (dispatch) => {
 		dispatch({
 			type: ERROR,
 			payload: "Intente mas tarde."
+		});
+	}
+}
+
+export const deleteTask = (taskId) => async (dispatch) => {
+	dispatch({
+		type: CARGANDO
+	});
+	try {
+		const response = await axios.delete(`https://jsonplaceholder.typicode.com/todos/${taskId}`);
+		console.log(response);
+		dispatch({
+			type: FETCH_ALL,
+			payload: {}
 		})
+	} catch(e) {
+		console.error(e);
+		dispatch({
+			type: ERROR,
+			payload: "Servicio no disponible."
+		});
 	}
 }
